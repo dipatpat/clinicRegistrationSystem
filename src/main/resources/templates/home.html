@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>LuxuryMed</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body class="home-body">
+
+<div class="home-wrapper">
+    <div class="home-brand">LuxuryMed</div>
+    <p class="home-tagline">Premium healthcare, effortlessly managed.</p>
+
+    <div class="home-card">
+        <h2 class="home-card-title">Sign in</h2>
+
+        <div th:if="${param.error}" class="alert alert-danger">
+            Incorrect username or password.
+        </div>
+        <div th:if="${param.logout}" class="alert alert-success">
+            You have been signed out.
+        </div>
+
+        <form th:action="@{/perform_login}" method="post">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" autofocus/>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password"/>
+            </div>
+            <button type="submit" class="btn btn-home">Sign in</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
