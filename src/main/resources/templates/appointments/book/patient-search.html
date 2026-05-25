@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/base :: head('Find Patient')}"></head>
+<body>
+<div th:replace="~{layout/base :: nav}"></div>
+
+<div class="container">
+    <div class="breadcrumb">
+        <a th:href="@{/appointments}">Appointments</a>
+        <span>›</span>
+        <a th:href="@{/appointments/book}">Select Doctor</a>
+        <span>›</span>
+        <a th:href="@{/appointments/book/{id}(id=${doctor.id})}" th:text="${'Dr. ' + doctor.lastName}"></a>
+        <span>›</span> Find Patient
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem">
+        <h1 style="margin-bottom:0">Find Patient</h1>
+        <a th:href="@{/appointments}" class="btn-back">✕ Cancel Booking</a>
+    </div>
+
+    <!-- Appointment summary chips -->
+    <div class="appt-summary">
+        <div class="appt-chip">
+            <span class="appt-chip-label">Doctor</span>
+            <span class="appt-chip-value" th:text="${'Dr. ' + doctor.firstName + ' ' + doctor.lastName}"></span>
+        </div>
+        <div class="appt-chip">
+            <span class="appt-chip-label">Date &amp; Time</span>
+            <span class="appt-chip-value" th:text="${#temporals.format(selectedDateTime, 'dd MMM yyyy, HH:mm')}"></span>
+        </div>
+        <div class="appt-chip">
+            <span class="appt-chip-label">Duration</span>
+            <span class="appt-chip-value" th:text="${duration + ' min'}"></span>
+        </div>
+    </div>
+
+    <!-- PESEL search -->
+    <div class="card">
+        <p class="card-section-label">Search patient by PESEL</p>
+        <form th:action="@{/appointments/book/{id}/find-patient(id=${doctor.id})}" method="post"
+              class="search-row">
+            <input type="hidden" name="dateTime"
+                   th:value="${#temporals.format(selectedDateTime, 'yyyy-MM-dd''T''HH:mm:ss')}"/>
+            <input type="hidden" name="duration" th:value="${duration}"/>
+            <input type="text" name="pesel" placeholder="Enter 11-digit PESEL"
+                   th:value="${searchedPesel}" maxlength="11" class="search-input"/>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+
+    <!-- Patient not found -->
+    <div th:if="${patientNotFound}" class="not-found-card">
+        <div class="not-found-text">
+            <p>No patient found with PESEL <strong th:text="${searchedPesel}"></strong>.</p>
+            <p>Would you like to register them as a new patient?</p>
+        </div>
+        <a th:href="@{/appointments/book/{id}/register-patient(id=${doctor.id},
+                    dateTime=${#temporals.format(selectedDateTime, 'yyyy-MM-dd''T''HH:mm:ss')},
+                    duration=${duration})}"
+           class="btn-register">+ Register New Patient</a>
+    </div>
+
+    <!-- Patient found -->
+    <div th:if="${patient != null}">
+        <div class="patient-found-card">
+            <div class="patient-avatar-lg"
+                 th:text="${#strings.substring(patient.firstName,0,1) + #strings.substring(patient.lastName,0,1)}"></div>
+            <div class="patient-found-info">
+                <div class="patient-found-name" th:text="${patient.firstName + ' ' + patient.lastName}"></div>
+                <div class="patient-found-meta">
+                    <span>PESEL: <strong th:text="${patient.pesel}"></strong></span>
+                    <span>DOB: <strong th:text="${#temporals.format(patient.dateOfBirth, 'dd MMM yyyy')}"></strong></span>
+                </div>
+                <div th:if="${patient.requiresGuardianConsent}" class="guardian-warning">
+                    Patient is under 18 — guardian consent required.
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <p class="card-section-label">Confirm appointment</p>
+            <form th:action="@{/appointments/book/confirm}" method="post">
+                <input type="hidden" name="doctorId" th:value="${doctor.id}"/>
+                <input type="hidden" name="patientPesel" th:value="${patient.pesel}"/>
+                <input type="hidden" name="dateTime"
+                       th:value="${#temporals.format(selectedDateTime, 'yyyy-MM-dd''T''HH:mm:ss')}"/>
+                <input type="hidden" name="duration" th:value="${duration}"/>
+                <div class="form-group" style="max-width:320px">
+                    <label for="room">Room</label>
+                    <input type="text" id="room" name="room" placeholder="e.g. Room 101" required/>
+                </div>
+                <div style="display:flex; gap:0.75rem; margin-top:1rem">
+                    <button type="submit" class="btn btn-primary">Schedule Appointment</button>
+                    <a th:href="@{/appointments/book/{id}(id=${doctor.id})}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
