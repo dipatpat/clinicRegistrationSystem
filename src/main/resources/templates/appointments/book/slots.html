@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/base :: head('Available Slots')}"></head>
+<body>
+<div th:replace="~{layout/base :: nav}"></div>
+
+<div class="container">
+    <div class="breadcrumb">
+        <a th:href="@{/appointments}">Appointments</a>
+        <span>›</span>
+        <a th:href="@{/appointments/book}">Select Doctor</a>
+        <span>›</span>
+        <span th:text="${'Dr. ' + doctor.firstName + ' ' + doctor.lastName}"></span>
+    </div>
+
+    <div class="slots-header">
+        <div>
+            <h1 th:text="${'Dr. ' + doctor.firstName + ' ' + doctor.lastName}"></h1>
+            <p class="slots-specialization" th:text="${doctor.specialization}"></p>
+        </div>
+    </div>
+
+    <!-- Duration picker -->
+    <div class="duration-picker">
+        <span class="duration-label">Appointment duration:</span>
+        <a th:href="@{/appointments/book/{id}(id=${doctor.id}, duration=15, date=${selectedDate})}"
+           th:classappend="${duration == 15} ? ' active'" class="duration-btn">15 min</a>
+        <a th:href="@{/appointments/book/{id}(id=${doctor.id}, duration=30, date=${selectedDate})}"
+           th:classappend="${duration == 30} ? ' active'" class="duration-btn">30 min</a>
+        <a th:href="@{/appointments/book/{id}(id=${doctor.id}, duration=45, date=${selectedDate})}"
+           th:classappend="${duration == 45} ? ' active'" class="duration-btn">45 min</a>
+    </div>
+
+    <!-- No slots at all -->
+    <div th:if="${#lists.isEmpty(availableDates)}" class="alert alert-info">
+        No available slots for this doctor.
+        <a th:href="@{/appointments/book}">Choose another doctor.</a>
+    </div>
+
+    <div th:unless="${#lists.isEmpty(availableDates)}">
+        <!-- Date pills -->
+        <div class="date-pills">
+            <a th:each="d : ${availableDates}"
+               th:href="@{/appointments/book/{id}(id=${doctor.id}, duration=${duration}, date=${d})}"
+               th:classappend="${d == selectedDate} ? ' active'"
+               class="date-pill"
+               th:text="${#temporals.format(d, 'EEE dd MMM')}"></a>
+        </div>
+
+        <!-- Time slots -->
+        <div class="card" th:if="${selectedDate != null}">
+            <p class="slots-date-title" th:text="${#temporals.format(selectedDate, 'EEEE, dd MMMM yyyy')}"></p>
+            <div class="slot-grid">
+                <form th:each="slot : ${selectedSlots}"
+                      th:action="@{/appointments/book/{id}/find-patient(id=${doctor.id})}"
+                      method="post">
+                    <input type="hidden" name="dateTime"
+                           th:value="${#strings.concat(#temporals.format(selectedDate, 'yyyy-MM-dd'), 'T', #temporals.format(slot, 'HH:mm:ss'))}"/>
+                    <input type="hidden" name="duration" th:value="${duration}"/>
+                    <button type="submit" class="slot-btn" th:text="${#temporals.format(slot, 'HH:mm')}"></button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <a th:href="@{/appointments/book}" class="btn btn-back">← Back to Doctor List</a>
+</div>
+</body>
+</html>
