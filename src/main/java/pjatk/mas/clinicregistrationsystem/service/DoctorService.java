@@ -38,28 +38,39 @@ public class DoctorService {
                 .orElseThrow(() -> new IllegalArgumentException("Doctor not found: " + id));
     }
 
-    public List<LocalDateTime> getAvailableSlots(Long doctorId) {
+    public List<Appointment> getAppointments(Long doctorId) {
+        Doctor doctor = findById(doctorId);
+        return new ArrayList<>(doctor.getAppointments());
+    }
+
+    public Map<LocalDate, List<LocalTime>> getAvailableSlotsByDate(Long doctorId, int durationMinutes) {
         Doctor doctor = findById(doctorId);
 
-        Set<LocalDateTime> booked = appointmentRepository.findByDoctorId(doctorId).stream()
+        List<Appointment> booked = appointmentRepository.findByDoctorId(doctorId).stream()
                 .filter(a -> a.getStatus() != Status.CANCELLED)
-                .map(Appointment::getDate)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
 
-        List<LocalDateTime> slots = new ArrayList<>();
+        Map<LocalDate, List<LocalTime>> result = new TreeMap<>();
+
         for (Schedule schedule : doctor.getSchedules()) {
             LocalDate day = schedule.getValidFrom();
             while (!day.isAfter(schedule.getValidTo())) {
-                for (LocalTime time : schedule.getAvailableTime(day)) {
-                    LocalDateTime slot = LocalDateTime.of(day, time);
-                    if (slot.isAfter(LocalDateTime.now()) && !booked.contains(slot)) {
-                        slots.add(slot);
-                    }
+                List<LocalTime> slots = new ArrayList<>();
+                LocalTime cursor = schedule.getWorkDayStart();
+                while (!cursor.plusMinutes(durationMinutes).isAfter(schedule.getWorkDayEnd())) {
+                    LocalDateTime slotStart = LocalDateTime.of(day, cursor);
+                    LocalDateTime slotEnd = slotStart.plusMinutes(durationMinutes);
+                    boolean free = booked.stream().noneMatch(a -> {
+                        LocalDateTime aEnd = a.getDate().plusMinutes((long) a.getDuration());
+                        return slotStart.isBefore(aEnd) && slotEnd.isAfter(a.getDate());
+                    });
+                    if (slotStart.isAfter(LocalDateTime.now()) && free) slots.add(cursor);
+                    cursor = cursor.plusMinutes(15);
                 }
+                if (!slots.isEmpty()) result.put(day, slots);
                 day = day.plusDays(1);
             }
         }
-        Collections.sort(slots);
-        return slots;
+        return result;
     }
 }
