@@ -49,6 +49,7 @@ public class PatientRegistrationForm {
 
     private Long returnDoctorId;
     private String returnDateTime;
+    private int returnDuration = 30;
 
     public String getFirstName() { return firstName; }
     public String getLastName() { return lastName; }
@@ -64,6 +65,7 @@ public class PatientRegistrationForm {
     public String getApartmentNumber() { return apartmentNumber; }
     public Long getReturnDoctorId() { return returnDoctorId; }
     public String getReturnDateTime() { return returnDateTime; }
+    public int getReturnDuration() { return returnDuration; }
 
     public void setFirstName(String firstName) { this.firstName = firstName; }
     public void setLastName(String lastName) { this.lastName = lastName; }
@@ -79,4 +81,5 @@ public class PatientRegistrationForm {
     public void setApartmentNumber(String apartmentNumber) { this.apartmentNumber = apartmentNumber; }
     public void setReturnDoctorId(Long returnDoctorId) { this.returnDoctorId = returnDoctorId; }
     public void setReturnDateTime(String returnDateTime) { this.returnDateTime = returnDateTime; }
+    public void setReturnDuration(int returnDuration) { this.returnDuration = returnDuration; }
 }
