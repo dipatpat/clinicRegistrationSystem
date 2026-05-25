@@ -14,7 +14,12 @@ import pjatk.mas.clinicregistrationsystem.service.AppointmentService;
 import pjatk.mas.clinicregistrationsystem.service.DoctorService;
 import pjatk.mas.clinicregistrationsystem.service.PatientService;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -52,21 +57,47 @@ public class AppointmentController {
     // --- Booking flow: Step 2 — available slots for selected doctor ---
 
     @GetMapping("/book/{doctorId}")
-    public String bookStep2(@PathVariable Long doctorId, Model model) {
+    public String bookStep2(@PathVariable Long doctorId,
+                            @RequestParam(defaultValue = "30") int duration,
+                            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+                            Model model) {
+        Map<LocalDate, List<LocalTime>> slotsByDate = doctorService.getAvailableSlotsByDate(doctorId, duration);
+        List<LocalDate> availableDates = new ArrayList<>(slotsByDate.keySet());
+        LocalDate selectedDate = (date != null && slotsByDate.containsKey(date)) ? date
+                : (availableDates.isEmpty() ? null : availableDates.get(0));
+
         model.addAttribute("doctor", doctorService.findById(doctorId));
-        model.addAttribute("slots", doctorService.getAvailableSlots(doctorId));
+        model.addAttribute("availableDates", availableDates);
+        model.addAttribute("selectedDate", selectedDate);
+        model.addAttribute("selectedSlots", selectedDate != null ? slotsByDate.get(selectedDate) : List.of());
+        model.addAttribute("duration", duration);
         return "appointments/book/slots";
     }
 
     // --- Booking flow: Step 3 — find patient by PESEL ---
 
+    @GetMapping("/book/{doctorId}/find-patient")
+    public String findPatientGet(@PathVariable Long doctorId,
+                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
+                                 @RequestParam(defaultValue = "30") int duration,
+                                 @RequestParam(required = false) String pesel,
+                                 Model model) {
+        return doFindPatient(doctorId, dateTime, duration, pesel, model);
+    }
+
     @PostMapping("/book/{doctorId}/find-patient")
     public String findPatient(@PathVariable Long doctorId,
                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
+                              @RequestParam(defaultValue = "30") int duration,
                               @RequestParam(required = false) String pesel,
                               Model model) {
+        return doFindPatient(doctorId, dateTime, duration, pesel, model);
+    }
+
+    private String doFindPatient(Long doctorId, LocalDateTime dateTime, int duration, String pesel, Model model) {
         model.addAttribute("doctor", doctorService.findById(doctorId));
         model.addAttribute("selectedDateTime", dateTime);
+        model.addAttribute("duration", duration);
 
         if (pesel != null && !pesel.isBlank()) {
             Optional<Patient> patient = patientService.findByPesel(pesel);
@@ -99,10 +130,12 @@ public class AppointmentController {
     @GetMapping("/book/{doctorId}/register-patient")
     public String registerPatientForm(@PathVariable Long doctorId,
                                       @RequestParam String dateTime,
+                                      @RequestParam(defaultValue = "30") int duration,
                                       Model model) {
         PatientRegistrationForm form = new PatientRegistrationForm();
         form.setReturnDoctorId(doctorId);
         form.setReturnDateTime(dateTime);
+        form.setReturnDuration(duration);
         model.addAttribute("form", form);
         model.addAttribute("doctor", doctorService.findById(doctorId));
         return "appointments/book/patient-register";
@@ -125,7 +158,7 @@ public class AppointmentController {
             return "appointments/book/patient-register";
         }
         return "redirect:/appointments/book/" + doctorId + "/find-patient?dateTime="
-                + form.getReturnDateTime() + "&pesel=" + form.getPesel();
+                + form.getReturnDateTime() + "&pesel=" + form.getPesel() + "&duration=" + form.getReturnDuration();
     }
 
     // --- Confirm / Cancel existing appointments ---
