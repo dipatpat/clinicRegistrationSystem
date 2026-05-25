@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/base :: head('Doctor Appointments')}"></head>
+<body>
+<div th:replace="~{layout/base :: nav}"></div>
+
+<div class="container">
+    <div class="breadcrumb">
+        <a th:href="@{/appointments}">Appointments</a>
+        <span>›</span>
+        <a th:href="@{/appointments/book}">Doctors</a>
+        <span>›</span>
+        <span th:text="${'Dr. ' + doctor.firstName + ' ' + doctor.lastName}"></span>
+    </div>
+
+    <!-- Doctor header -->
+    <div class="patient-found-card" style="margin-bottom:1.5rem">
+        <div class="patient-avatar-lg"
+             th:text="${#strings.substring(doctor.firstName,0,1) + #strings.substring(doctor.lastName,0,1)}"></div>
+        <div>
+            <div class="patient-found-name" th:text="${'Dr. ' + doctor.firstName + ' ' + doctor.lastName}"></div>
+            <div class="patient-found-meta">
+                <span th:text="${doctor.specialization}"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Appointments table -->
+    <div class="card">
+        <p class="card-section-label">Appointments</p>
+        <table>
+            <thead>
+            <tr>
+                <th>Date &amp; Time</th>
+                <th>Patient</th>
+                <th>Room</th>
+                <th>Duration</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="apt : ${appointments}">
+                <td th:text="${#temporals.format(apt.date, 'dd MMM yyyy HH:mm')}"></td>
+                <td th:text="${apt.patient.firstName + ' ' + apt.patient.lastName}"></td>
+                <td th:text="${apt.room}"></td>
+                <td th:text="${apt.duration + ' min'}"></td>
+                <td>
+                    <span class="badge"
+                          th:classappend="'badge-' + ${apt.status.name().toLowerCase()}"
+                          th:text="${apt.status}"></span>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(appointments)}">
+                <td colspan="5" class="empty-row">No appointments found for this doctor.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <a th:href="@{/appointments/book}" class="btn-back">← Back to Doctors</a>
+</div>
+</body>
+</html>
