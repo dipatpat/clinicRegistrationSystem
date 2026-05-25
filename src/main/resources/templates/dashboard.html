@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/base :: head('Dashboard')}"></head>
+<body>
+<div th:replace="~{layout/base :: nav}"></div>
+<div class="container">
+    <h1>Manager Dashboard</h1>
+    <div class="card">
+        <p>Welcome, <strong sec:authentication="name"></strong>.</p>
+    </div>
+</div>
+</body>
+</html>
