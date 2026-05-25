@@ -24,11 +24,12 @@ public abstract class Person {
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "streetName",      column = @Column(name = "street_name",      nullable = false)),
-            @AttributeOverride(name = "streetNumber",    column = @Column(name = "street_number",    nullable = false)),
-            @AttributeOverride(name = "postalCode",      column = @Column(name = "postal_code",      nullable = false)),
-            @AttributeOverride(name = "cityName",        column = @Column(name = "city_name",        nullable = false)),
-            @AttributeOverride(name = "apartmentNumber", column = @Column(name = "apartment_number"))
+            @AttributeOverride(name = "country",         column = @Column(nullable = false)),
+            @AttributeOverride(name = "streetName",      column = @Column(nullable = false)),
+            @AttributeOverride(name = "streetNumber",    column = @Column(nullable = false)),
+            @AttributeOverride(name = "postalCode",      column = @Column(nullable = false)),
+            @AttributeOverride(name = "cityName",        column = @Column(nullable = false)),
+            @AttributeOverride(name = "apartmentNumber", column = @Column())
     })
     private Address address;
 
