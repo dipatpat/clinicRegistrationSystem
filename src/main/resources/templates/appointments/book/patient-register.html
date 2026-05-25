@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/base :: head('Register Patient')}"></head>
+<body>
+<div th:replace="~{layout/base :: nav}"></div>
+
+<div class="container">
+    <div class="breadcrumb">
+        <a th:href="@{/appointments}">Appointments</a>
+        <span>›</span>
+        <a th:href="@{/appointments/book}">Select Doctor</a>
+        <span>›</span>
+        <a th:href="@{/appointments/book/{id}(id=${doctor.id})}" th:text="${'Dr. ' + doctor.lastName}"></a>
+        <span>›</span> Register New Patient
+    </div>
+
+    <h1>Register New Patient</h1>
+
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+    <div class="card">
+        <form th:action="@{/appointments/book/{id}/register-patient(id=${doctor.id})}"
+              method="post" th:object="${form}">
+            <input type="hidden" th:field="*{returnDoctorId}"/>
+            <input type="hidden" th:field="*{returnDateTime}"/>
+            <input type="hidden" th:field="*{returnDuration}"/>
+
+            <p class="section-title">Personal Details</p>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem">
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" th:field="*{firstName}" th:classappend="${#fields.hasErrors('firstName')} ? 'input-error'"/>
+                    <span class="field-error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" th:field="*{lastName}" th:classappend="${#fields.hasErrors('lastName')} ? 'input-error'"/>
+                    <span class="field-error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
+                </div>
+                <div class="form-group">
+                    <label>Date of Birth</label>
+                    <input type="date" th:field="*{dateOfBirth}" th:classappend="${#fields.hasErrors('dateOfBirth')} ? 'input-error'"/>
+                    <span class="field-error" th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}"></span>
+                </div>
+                <div class="form-group">
+                    <label>PESEL</label>
+                    <input type="text" th:field="*{pesel}" maxlength="11" th:classappend="${#fields.hasErrors('pesel')} ? 'input-error'"/>
+                    <span class="field-error" th:if="${#fields.hasErrors('pesel')}" th:errors="*{pesel}"></span>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" th:field="*{phoneNumber}" th:classappend="${#fields.hasErrors('phoneNumber')} ? 'input-error'"/>
+                    <span class="field-error" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></span>
+                </div>
+                <div class="form-group">
+                    <label>Email Address (optional)</label>
+                    <input type="email" th:field="*{emailAddress}" th:classappend="${#fields.hasErrors('emailAddress')} ? 'input-error'"/>
+                    <span class="field-error" th:if="${#fields.hasErrors('emailAddress')}" th:errors="*{emailAddress}"></span>
+                </div>
+            </div>
+
+            <p class="section-title">Address</p>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem">
+                <div class="form-group">
+                    <label>Country</label>
+                    <input type="text" th:field="*{country}" th:classappend="${#fields.hasErrors('country')} ? 'input-error'"/>
+                    <span class="field-error" th:if="${#fields.hasErrors('country')}" th:errors="*{country}"></span>
+                </div>
+                <div class="form-group">
+                    <label>City</label>
+                    <input type="text" th:field="*{cityName}" th:classappend="${#fields.hasErrors('cityName')} ? 'input-error'"/>
+                    <span class="field-error" th:if="${#fields.hasErrors('cityName')}" th:errors="*{cityName}"></span>
+                </div>
+                <div class="form-group">
+                    <label>Street Name</label>
+                    <input type="text" th:field="*{streetName}" th:classappend="${#fields.hasErrors('streetName')} ? 'input-error'"/>
+                    <span class="field-error" th:if="${#fields.hasErrors('streetName')}" th:errors="*{streetName}"></span>
+                </div>
+                <div class="form-group">
+                    <label>Street Number</label>
+                    <input type="text" th:field="*{streetNumber}" th:classappend="${#fields.hasErrors('streetNumber')} ? 'input-error'"/>
+                    <span class="field-error" th:if="${#fields.hasErrors('streetNumber')}" th:errors="*{streetNumber}"></span>
+                </div>
+                <div class="form-group">
+                    <label>Postal Code (XX-XXX)</label>
+                    <input type="text" th:field="*{postalCode}" placeholder="00-000" th:classappend="${#fields.hasErrors('postalCode')} ? 'input-error'"/>
+                    <span class="field-error" th:if="${#fields.hasErrors('postalCode')}" th:errors="*{postalCode}"></span>
+                </div>
+                <div class="form-group">
+                    <label>Apartment Number (optional)</label>
+                    <input type="text" th:field="*{apartmentNumber}"/>
+                </div>
+            </div>
+
+            <div style="margin-top:1rem">
+                <button type="submit" class="btn btn-primary">Register Patient</button>
+                <a th:href="@{/appointments/book/{id}/find-patient(id=${doctor.id},
+                            dateTime=${form.returnDateTime})}"
+                   class="btn btn-secondary" style="margin-left:0.5rem">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
