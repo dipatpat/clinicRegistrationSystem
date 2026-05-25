@@ -7,6 +7,9 @@ import jakarta.persistence.Embeddable;
 public class Address {
 
     @Column(nullable = false)
+    private String country;
+
+    @Column(nullable = false)
     private String streetName;
 
     @Column(nullable = false)
@@ -22,11 +25,13 @@ public class Address {
 
     protected Address() {}
 
-    public Address(String streetName, String streetNumber, String postalCode, String cityName, String apartmentNumber) {
+    public Address(String country, String streetName, String streetNumber, String postalCode, String cityName, String apartmentNumber) {
+        if (country == null || country.isBlank()) throw new IllegalArgumentException("Country cannot be blank");
         if (streetName == null || streetName.isBlank()) throw new IllegalArgumentException("Street name cannot be blank");
         if (streetNumber == null || streetNumber.isBlank()) throw new IllegalArgumentException("Street number cannot be blank");
         if (postalCode == null || postalCode.isBlank()) throw new IllegalArgumentException("Postal code cannot be blank");
         if (cityName == null || cityName.isBlank()) throw new IllegalArgumentException("City name cannot be blank");
+        this.country = country;
         this.streetName = streetName;
         this.streetNumber = streetNumber;
         this.postalCode = postalCode;
@@ -34,6 +39,7 @@ public class Address {
         this.apartmentNumber = apartmentNumber;
     }
 
+    public String getCountry() { return country; }
     public String getStreetName() { return streetName; }
     public String getStreetNumber() { return streetNumber; }
     public String getPostalCode() { return postalCode; }
@@ -44,6 +50,6 @@ public class Address {
     public String toString() {
         String base = streetName + " " + streetNumber;
         if (apartmentNumber != null && !apartmentNumber.isBlank()) base += "/" + apartmentNumber;
-        return base + ", " + postalCode + " " + cityName;
+        return base + ", " + postalCode + " " + cityName + ", " + country;
     }
 }
