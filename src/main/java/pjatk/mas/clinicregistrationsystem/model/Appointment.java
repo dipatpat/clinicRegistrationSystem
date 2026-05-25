@@ -46,6 +46,20 @@ public class Appointment {
 
     protected Appointment() {}
 
+    public static Appointment forSeeding(Patient patient, Doctor doctor, LocalDateTime date, String room, float duration) {
+        Appointment a = new Appointment();
+        a.patient = patient;
+        a.doctor = doctor;
+        a.date = date;
+        a.room = room;
+        a.duration = duration;
+        a.createdAt = date.minusDays(7);
+        a.status = Status.SCHEDULED;
+        patient.addAppointment(a);
+        doctor.addAppointment(a);
+        return a;
+    }
+
     public Appointment(Patient patient, Doctor doctor, LocalDateTime date, String room, float duration) {
         if (patient == null) throw new IllegalArgumentException("Patient cannot be null");
         if (doctor == null) throw new IllegalArgumentException("Doctor cannot be null");
@@ -78,8 +92,10 @@ public class Appointment {
     }
 
     public void markPatientsNoShow() {
-        if (status != Status.CONFIRMED && status != Status.SCHEDULED)
-            throw new IllegalStateException("Only scheduled or confirmed appointments can be marked as no-show");
+        if (status != Status.CONFIRMED)
+            throw new IllegalStateException("Only confirmed appointments can be marked as no-show");
+        if (date.isAfter(LocalDateTime.now()))
+            throw new IllegalStateException("Cannot mark a future appointment as no-show");
         this.status = Status.NOSHOW;
         this.noShow = true;
     }
@@ -87,9 +103,13 @@ public class Appointment {
     public void markAsCompleted() {
         if (status != Status.CONFIRMED)
             throw new IllegalStateException("Only confirmed appointments can be marked as completed");
+        if (date.isAfter(LocalDateTime.now()))
+            throw new IllegalStateException("Cannot mark a future appointment as completed");
         this.status = Status.COMPLETED;
         this.completedAt = LocalDateTime.now();
     }
+
+    public boolean isPast() { return date.isBefore(LocalDateTime.now()); }
 
     public Long getId() { return id; }
     public LocalDateTime getDate() { return date; }
