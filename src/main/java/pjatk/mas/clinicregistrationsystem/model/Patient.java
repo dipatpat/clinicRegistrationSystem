@@ -1,7 +1,6 @@
 package pjatk.mas.clinicregistrationsystem.model;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.NaturalId;
 import pjatk.mas.clinicregistrationsystem.model.enums.Status;
 
 import java.time.LocalDate;
@@ -16,7 +15,6 @@ public class Patient extends Person {
 
     public static final int MINIMUM_CONSENT_AGE = 18;
 
-    @NaturalId
     @Column(nullable = false, unique = true)
     private String pesel;
 
