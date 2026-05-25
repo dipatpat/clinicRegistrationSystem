@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/base :: head('Patient Details')}"></head>
+<body>
+<div th:replace="~{layout/base :: nav}"></div>
+
+<div class="container">
+    <div class="breadcrumb">
+        <a th:href="@{/appointments}">Appointments</a>
+        <span>›</span> Patient Appointments
+    </div>
+
+    <h1>Patient Appointments</h1>
+
+    <!-- PESEL search -->
+    <div class="card">
+        <p class="card-section-label">Search patient by PESEL</p>
+        <form th:action="@{/patients/search}" method="post" class="search-row">
+            <input type="text" name="pesel" placeholder="Enter 11-digit PESEL"
+                   th:value="${searchedPesel}" maxlength="11" class="search-input"/>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+
+    <!-- Patient not found -->
+    <div th:if="${patientNotFound}" class="alert alert-danger">
+        No patient found with PESEL <strong th:text="${searchedPesel}"></strong>.
+    </div>
+
+    <!-- Patient found -->
+    <div th:if="${patient != null}">
+        <div class="patient-found-card">
+            <div class="patient-avatar-lg"
+                 th:text="${#strings.substring(patient.firstName,0,1) + #strings.substring(patient.lastName,0,1)}"></div>
+            <div class="patient-found-info">
+                <div class="patient-found-name" th:text="${patient.firstName + ' ' + patient.lastName}"></div>
+                <div class="patient-found-meta">
+                    <span>PESEL: <strong th:text="${patient.pesel}"></strong></span>
+                    <span>DOB: <strong th:text="${#temporals.format(patient.dateOfBirth, 'dd MMM yyyy')}"></strong></span>
+                    <span th:if="${patient.phoneNumber}">Phone: <strong th:text="${patient.phoneNumber}"></strong></span>
+                </div>
+                <div th:if="${patient.requiresGuardianConsent}" class="guardian-warning">
+                    Patient is under 18 — guardian consent required.
+                </div>
+            </div>
+        </div>
+
+        <!-- Appointments table -->
+        <div class="card">
+            <p class="card-section-label">Appointments</p>
+            <table>
+                <thead>
+                <tr>
+                    <th>Date &amp; Time</th>
+                    <th>Doctor</th>
+                    <th>Specialization</th>
+                    <th>Room</th>
+                    <th>Duration</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="apt : ${appointments}">
+                    <td th:text="${#temporals.format(apt.date, 'dd MMM yyyy HH:mm')}"></td>
+                    <td th:text="${'Dr. ' + apt.doctor.firstName + ' ' + apt.doctor.lastName}"></td>
+                    <td th:text="${apt.doctor.specialization}"></td>
+                    <td th:text="${apt.room}"></td>
+                    <td th:text="${apt.duration + ' min'}"></td>
+                    <td>
+                        <span class="badge"
+                              th:classappend="'badge-' + ${apt.status.name().toLowerCase()}"
+                              th:text="${apt.status}"></span>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(appointments)}">
+                    <td colspan="6" class="empty-row">No appointments found for this patient.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <a th:href="@{/appointments}" class="btn-back">← Back to Appointments</a>
+</div>
+</body>
+</html>
