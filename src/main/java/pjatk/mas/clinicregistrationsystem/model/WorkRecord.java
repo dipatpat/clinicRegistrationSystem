@@ -10,10 +10,10 @@ public class WorkRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "work_month", nullable = false)
     private int month;
 
-    @Column(nullable = false)
+    @Column(name = "work_year", nullable = false)
     private int year;
 
     @Column(nullable = false)
