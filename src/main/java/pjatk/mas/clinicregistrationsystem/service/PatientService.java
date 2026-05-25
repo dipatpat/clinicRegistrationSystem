@@ -4,8 +4,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pjatk.mas.clinicregistrationsystem.dto.PatientRegistrationForm;
 import pjatk.mas.clinicregistrationsystem.model.Address;
+import pjatk.mas.clinicregistrationsystem.model.Appointment;
 import pjatk.mas.clinicregistrationsystem.model.MedicalRecord;
 import pjatk.mas.clinicregistrationsystem.model.Patient;
+
+import java.util.ArrayList;
+import java.util.List;
 import pjatk.mas.clinicregistrationsystem.repository.MedicalRecordRepository;
 import pjatk.mas.clinicregistrationsystem.repository.PatientRepository;
 
@@ -26,6 +30,12 @@ public class PatientService {
 
     public Optional<Patient> findByPesel(String pesel) {
         return patientRepository.findByPesel(pesel);
+    }
+
+    public List<Appointment> getAppointments(String pesel) {
+        Patient patient = patientRepository.findByPesel(pesel)
+                .orElseThrow(() -> new IllegalArgumentException("Patient not found: " + pesel));
+        return new ArrayList<>(patient.getAppointments());
     }
 
     @Transactional
