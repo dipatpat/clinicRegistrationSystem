@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/base :: head('Select a Doctor')}"></head>
+<body>
+<div th:replace="~{layout/base :: nav}"></div>
+
+<div class="container">
+    <div class="breadcrumb">
+        <a th:href="@{/appointments}">Appointments</a>
+        <span>›</span> Schedule Appointment
+    </div>
+
+    <h1>Select a Doctor</h1>
+
+    <div th:each="entry : ${doctorsBySpecialization}" class="specialization-section">
+        <div class="specialization-header" th:text="${entry.key}"></div>
+        <div class="doctor-grid">
+            <div class="doctor-card" th:each="doctor : ${entry.value}">
+                <div class="doctor-avatar"
+                     th:text="${#strings.substring(doctor.firstName, 0, 1) + #strings.substring(doctor.lastName, 0, 1)}">
+                </div>
+                <div class="doctor-info">
+                    <div class="doctor-name" th:text="${'Dr. ' + doctor.firstName + ' ' + doctor.lastName}"></div>
+                    <div class="doctor-specialization" th:text="${doctor.specialization}"></div>
+                </div>
+                <div class="doctor-card-actions">
+                    <a th:href="@{/appointments/book/{id}(id=${doctor.id})}" class="btn btn-doctor">
+                        View Availability
+                    </a>
+                    <a th:href="@{/doctors/{id}/appointments(id=${doctor.id})}" class="btn btn-doctor-secondary">
+                        View Appointments
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
