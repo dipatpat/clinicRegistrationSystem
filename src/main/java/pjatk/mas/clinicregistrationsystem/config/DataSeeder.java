@@ -173,7 +173,29 @@ public class DataSeeder {
                     "Skin irritation", "Contact dermatitis", "Prescribed hydrocortisone cream 1%");
             medicalRecordRepository.save(agnieszkaRecord);
 
-            // --- Appointments ---
+            // --- Past appointments (for testing Complete / No-show) ---
+            Appointment pastApt1 = Appointment.forSeeding(piotr, drNowak,
+                    LocalDateTime.of(2026, 5, 20, 10, 0), "Room 101", 30f);
+            pastApt1.confirm();
+            appointmentRepository.save(pastApt1);
+
+            Appointment pastApt2 = Appointment.forSeeding(agnieszka, drWojcik,
+                    LocalDateTime.of(2026, 5, 21, 14, 0), "Room 204", 30f);
+            pastApt2.confirm();
+            pastApt2.markPatientsNoShow();
+            appointmentRepository.save(pastApt2);
+
+            Appointment pastApt3 = Appointment.forSeeding(tomek, drKowalczyk,
+                    LocalDateTime.of(2026, 5, 22, 9, 0), "Room 301", 30f);
+            pastApt3.confirm();
+            pastApt3.markAsCompleted();
+            appointmentRepository.save(pastApt3);
+
+            Appointment pastApt4 = Appointment.forSeeding(agnieszka, drNowak,
+                    LocalDateTime.of(2026, 5, 23, 11, 0), "Room 102", 30f);
+            appointmentRepository.save(pastApt4);
+
+            // --- Future appointments ---
             Appointment apt1 = new Appointment(piotr, drNowak,
                     LocalDateTime.of(2026, 5, 28, 10, 0), "Room 101", 30f);
             apt1.confirm();
