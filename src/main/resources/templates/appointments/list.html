@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/base :: head('Appointments')}"></head>
+<body>
+<div th:replace="~{layout/base :: nav}"></div>
+
+<div class="container">
+    <div class="page-header">
+        <h1>Appointments</h1>
+        <div style="display:flex; gap:0.75rem">
+            <a th:href="@{/appointments/book}" class="btn btn-primary" sec:authorize="hasRole('RECEPTIONIST')">
+                + Schedule Appointment
+            </a>
+            <a th:href="@{/appointments/book}" class="btn btn-secondary" sec:authorize="hasRole('STAFF')">
+                Doctor Appointments
+            </a>
+            <a th:href="@{/patients/search}" class="btn btn-secondary" sec:authorize="hasRole('STAFF')">
+                Patient Appointments
+            </a>
+        </div>
+    </div>
+
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+    <div class="card">
+        <table>
+            <thead>
+            <tr>
+                <th>Date &amp; Time</th>
+                <th>Patient</th>
+                <th>Doctor</th>
+                <th>Specialization</th>
+                <th>Room</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="apt : ${appointments}">
+                <td th:text="${#temporals.format(apt.date, 'dd MMM yyyy HH:mm')}"></td>
+                <td th:text="${apt.patient.firstName + ' ' + apt.patient.lastName}"></td>
+                <td th:text="${'Dr. ' + apt.doctor.firstName + ' ' + apt.doctor.lastName}"></td>
+                <td th:text="${apt.doctor.specialization}"></td>
+                <td th:text="${apt.room}"></td>
+                <td>
+                    <span class="badge"
+                          th:classappend="'badge-' + ${apt.status.name().toLowerCase()}"
+                          th:text="${apt.status}"></span>
+                </td>
+                <td class="actions-cell">
+                    <form th:if="${apt.status.name() == 'SCHEDULED' and !apt.past}"
+                          th:action="@{/appointments/{id}/confirm(id=${apt.id})}" method="post">
+                        <button class="btn btn-sm btn-confirm">Confirm</button>
+                    </form>
+                    <form th:if="${apt.status.name() == 'SCHEDULED' and !apt.past}"
+                          th:action="@{/appointments/{id}/cancel(id=${apt.id})}" method="post">
+                        <button class="btn btn-sm btn-cancel">Cancel</button>
+                    </form>
+                    <form th:if="${apt.status.name() == 'CONFIRMED' and !apt.past}"
+                          th:action="@{/appointments/{id}/cancel(id=${apt.id})}" method="post">
+                        <button class="btn btn-sm btn-cancel">Cancel</button>
+                    </form>
+                    <form th:if="${apt.status.name() == 'CONFIRMED' and apt.past}"
+                          th:action="@{/appointments/{id}/complete(id=${apt.id})}" method="post">
+                        <button class="btn btn-sm btn-confirm">Complete</button>
+                    </form>
+                    <form th:if="${apt.status.name() == 'CONFIRMED' and apt.past}"
+                          th:action="@{/appointments/{id}/no-show(id=${apt.id})}" method="post">
+                        <button class="btn btn-sm btn-noshow">No-show</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(appointments)}">
+                <td colspan="7" class="empty-row">No appointments found.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
