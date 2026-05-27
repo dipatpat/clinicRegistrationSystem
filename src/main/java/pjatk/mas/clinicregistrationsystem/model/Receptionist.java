@@ -1,6 +1,7 @@
 package pjatk.mas.clinicregistrationsystem.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class Receptionist extends Employee {
     @ElementCollection
     @CollectionTable(name = "Receptionist_languages", joinColumns = @JoinColumn(name = "receptionist_id"))
     @Column(name = "language", nullable = false)
+    @Size(min = 1, message = "Receptionist must speak at least one language")
     private List<String> languagesSpoken = new ArrayList<>();
 
     protected Receptionist() {}
