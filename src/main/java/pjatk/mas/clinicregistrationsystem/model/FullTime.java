@@ -18,7 +18,7 @@ public class FullTime extends ContractType {
         this.overtimeRate = overtimeRate;
     }
 
-    public static FullTime create(float overtimeRate) {
+    static FullTime create(float overtimeRate) {
         return new FullTime(overtimeRate);
     }
 
