@@ -38,24 +38,23 @@ public class DataSeeder {
             Address lodz = new Address("Poland", "Piotrkowska", "100", "90-001", "Łódź", null);
 
             // --- Manager ---
-            Manager manager = new Manager(
+            Manager manager = Manager.createWithFullTime(
                     "Anna", "Kowalska", LocalDate.of(1978, 3, 15),
                     warsawCenter, "+48 600 100 100", "anna.kowalska@clinic.pl",
                     "Clinic Manager", 120f, "PL10 1090 0043 0000 0710 8100 0001",
                     "anna", encodedPassword, "DOC123456",
-                    SeniorityLevel.SENIOR);
-            manager.assignContract(FullTime.create(1.5f));
+                    SeniorityLevel.SENIOR, 1.5f);
             manager.addWorkRecord(5, 2026, 160f);
             employeeRepository.save(manager);
 
             // --- Receptionist ---
-            Receptionist receptionist = new Receptionist(
+            Receptionist receptionist = Receptionist.createWithPartTime(
                     "Katarzyna", "Zielińska", LocalDate.of(1992, 7, 20),
                     warsawMokotow, "+48 600 200 200", "katarzyna.zielinska@clinic.pl",
                     "Receptionist", 45f, "PL10 1090 0043 0000 0710 8100 0002",
                     "katarzyna", encodedPassword, "DOC234567",
-                    List.of("Polish", "English"));
-            receptionist.assignContract(PartTime.create(Shift.MORNING, 30));
+                    List.of("Polish", "English"),
+                    Shift.MORNING, 30);
             receptionist.addWorkRecord(5, 2026, 120f);
             employeeRepository.save(receptionist);
 
@@ -65,68 +64,62 @@ public class DataSeeder {
             LocalTime dayStart = LocalTime.of(8, 0);
             LocalTime dayEnd = LocalTime.of(16, 0);
 
-            Doctor drNowak = new Doctor(
+            Doctor drNowak = Doctor.createWithFullTime(
                     "Jan", "Nowak", LocalDate.of(1975, 4, 10),
                     warsawCenter, "+48 600 300 100", "jan.nowak@clinic.pl",
                     "Cardiologist", 100f, "PL10 1090 0043 0000 0710 8100 0003",
                     "jan", encodedPassword, "LIC100001",
-                    "Cardiology", "PWZ/100001");
-            drNowak.assignContract(FullTime.create(1.5f));
+                    "Cardiology", "PWZ/100001", 1.5f);
             drNowak.addSchedule(scheduleFrom, scheduleTo, dayStart, dayEnd);
             drNowak.addWorkRecord(5, 2026, 160f);
             doctorRepository.save(drNowak);
 
-            Doctor drWisniewska = new Doctor(
+            Doctor drWisniewska = Doctor.createWithPartTime(
                     "Maria", "Wiśniewska", LocalDate.of(1983, 9, 5),
                     krakow, "+48 600 300 200", "maria.wisniewska@clinic.pl",
                     "GP", 80f, "PL10 1090 0043 0000 0710 8100 0004",
                     "maria", encodedPassword, "LIC100002",
-                    "General Practice", "PWZ/100002");
-            drWisniewska.assignContract(PartTime.create(Shift.MORNING, 20));
+                    "General Practice", "PWZ/100002", Shift.MORNING, 20);
             drWisniewska.addSchedule(scheduleFrom, scheduleTo, LocalTime.of(8, 0), LocalTime.of(12, 0));
             drWisniewska.addWorkRecord(5, 2026, 80f);
             doctorRepository.save(drWisniewska);
 
-            Doctor drKowalczyk = new Doctor(
+            Doctor drKowalczyk = Doctor.createWithFullTime(
                     "Ewa", "Kowalczyk", LocalDate.of(1980, 1, 22),
                     gdansk, "+48 600 300 300", "ewa.kowalczyk@clinic.pl",
                     "Gynaecologist", 95f, "PL10 1090 0043 0000 0710 8100 0005",
                     "ewa", encodedPassword, "LIC100003",
-                    "Gynaecology", "PWZ/100003");
-            drKowalczyk.assignContract(FullTime.create(1.5f));
+                    "Gynaecology", "PWZ/100003", 1.5f);
             drKowalczyk.addSchedule(scheduleFrom, scheduleTo, dayStart, dayEnd);
             drKowalczyk.addWorkRecord(5, 2026, 160f);
             doctorRepository.save(drKowalczyk);
 
-            Doctor drDabrowska = new Doctor(
+            Doctor drDabrowska = Doctor.createWithFullTime(
                     "Joanna", "Dąbrowska", LocalDate.of(1987, 6, 14),
                     warsawMokotow, "+48 600 300 400", "joanna.dabrowska@clinic.pl",
                     "Gynaecologist", 95f, "PL10 1090 0043 0000 0710 8100 0006",
                     "joanna", encodedPassword, "LIC100004",
-                    "Gynaecology", "PWZ/100004");
-            drDabrowska.assignContract(FullTime.create(1.5f));
+                    "Gynaecology", "PWZ/100004", 1.5f);
             drDabrowska.addSchedule(scheduleFrom, scheduleTo, dayStart, dayEnd);
             drDabrowska.addWorkRecord(5, 2026, 160f);
             doctorRepository.save(drDabrowska);
 
-            Doctor drWojcik = new Doctor(
+            Doctor drWojcik = Doctor.createWithFullTime(
                     "Tomasz", "Wójcik", LocalDate.of(1979, 11, 30),
                     poznan, "+48 600 300 500", "tomasz.wojcik@clinic.pl",
                     "Dermatologist", 90f, "PL10 1090 0043 0000 0710 8100 0007",
                     "tomasz", encodedPassword, "LIC100005",
-                    "Dermatology", "PWZ/100005");
-            drWojcik.assignContract(FullTime.create(1.5f));
+                    "Dermatology", "PWZ/100005", 1.5f);
             drWojcik.addSchedule(scheduleFrom, scheduleTo, dayStart, dayEnd);
             drWojcik.addWorkRecord(5, 2026, 160f);
             doctorRepository.save(drWojcik);
 
-            Doctor drLewandowska = new Doctor(
+            Doctor drLewandowska = Doctor.createWithPartTime(
                     "Agnieszka", "Lewandowska", LocalDate.of(1985, 3, 8),
                     lodz, "+48 600 300 600", "agnieszka.lewandowska@clinic.pl",
                     "Dermatologist", 90f, "PL10 1090 0043 0000 0710 8100 0008",
                     "agnieszka.l", encodedPassword, "LIC100006",
-                    "Dermatology", "PWZ/100006");
-            drLewandowska.assignContract(PartTime.create(Shift.AFTERNOON, 30));
+                    "Dermatology", "PWZ/100006", Shift.AFTERNOON, 30);
             drLewandowska.addSchedule(scheduleFrom, scheduleTo, LocalTime.of(12, 0), LocalTime.of(18, 0));
             drLewandowska.addWorkRecord(5, 2026, 120f);
             doctorRepository.save(drLewandowska);
@@ -197,7 +190,7 @@ public class DataSeeder {
 
             // --- Future appointments ---
             Appointment apt1 = new Appointment(piotr, drNowak,
-                    LocalDateTime.of(2026, 5, 28, 10, 0), "Room 101", 30f);
+                    LocalDateTime.of(2026, 5, 29, 10, 0), "Room 101", 30f);
             apt1.confirm();
             appointmentRepository.save(apt1);
 

@@ -38,7 +38,6 @@ public class AppointmentController {
         this.patientService = patientService;
     }
 
-    // --- Appointment list ---
 
     @GetMapping
     public String list(Model model) {
@@ -46,7 +45,6 @@ public class AppointmentController {
         return "appointments/list";
     }
 
-    // --- Booking flow: Step 1 — doctor list ---
 
     @GetMapping("/book")
     public String bookStep1(Model model) {
@@ -54,7 +52,6 @@ public class AppointmentController {
         return "appointments/book/doctors";
     }
 
-    // --- Booking flow: Step 2 — available slots for selected doctor ---
 
     @GetMapping("/book/{doctorId}")
     public String bookStep2(@PathVariable Long doctorId,
@@ -74,7 +71,6 @@ public class AppointmentController {
         return "appointments/book/slots";
     }
 
-    // --- Booking flow: Step 3 — find patient by PESEL ---
 
     @GetMapping("/book/{doctorId}/find-patient")
     public String findPatientGet(@PathVariable Long doctorId,
@@ -111,7 +107,6 @@ public class AppointmentController {
         return "appointments/book/patient-search";
     }
 
-    // --- Booking flow: Step 4 — confirm and create appointment ---
 
     @PostMapping("/book/confirm")
     public String confirm(@ModelAttribute AppointmentForm form,
@@ -125,7 +120,6 @@ public class AppointmentController {
         return "redirect:/appointments";
     }
 
-    // --- Booking flow: Alternative — register new patient inline ---
 
     @GetMapping("/book/{doctorId}/register-patient")
     public String registerPatientForm(@PathVariable Long doctorId,
@@ -161,7 +155,6 @@ public class AppointmentController {
                 + form.getReturnDateTime() + "&pesel=" + form.getPesel() + "&duration=" + form.getReturnDuration();
     }
 
-    // --- Confirm / Cancel existing appointments ---
 
     @PostMapping("/{id}/confirm")
     public String confirmAppointment(@PathVariable Long id, RedirectAttributes redirectAttributes) {
