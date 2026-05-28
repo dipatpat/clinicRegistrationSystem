@@ -1,6 +1,14 @@
 package pjatk.mas.clinicregistrationsystem.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Transient;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -23,14 +31,6 @@ public abstract class Person {
     private LocalDate dateOfBirth;
 
     @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "country",         column = @Column(nullable = false)),
-            @AttributeOverride(name = "streetName",      column = @Column(nullable = false)),
-            @AttributeOverride(name = "streetNumber",    column = @Column(nullable = false)),
-            @AttributeOverride(name = "postalCode",      column = @Column(nullable = false)),
-            @AttributeOverride(name = "cityName",        column = @Column(nullable = false)),
-            @AttributeOverride(name = "apartmentNumber", column = @Column())
-    })
     private Address address;
 
     @Column(nullable = false)
