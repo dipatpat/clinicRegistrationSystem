@@ -12,6 +12,8 @@ import java.util.Optional;
 @RequestMapping("/patients")
 public class PatientController {
 
+    private static final String SEARCH_VIEW = "patients/search";
+
     private final PatientService patientService;
 
     public PatientController(PatientService patientService) {
@@ -20,7 +22,7 @@ public class PatientController {
 
     @GetMapping("/search")
     public String searchForm() {
-        return "patients/search";
+        return SEARCH_VIEW;
     }
 
     @PostMapping("/search")
@@ -35,6 +37,13 @@ public class PatientController {
                 model.addAttribute("searchedPesel", pesel);
             }
         }
-        return "patients/search";
+        return SEARCH_VIEW;
+    }
+
+    @GetMapping("/{id}/appointments")
+    public String viewAppointments(@PathVariable Long id, Model model) {
+        model.addAttribute("patient", patientService.findById(id));
+        model.addAttribute("appointments", patientService.getAppointmentsById(id));
+        return SEARCH_VIEW;
     }
 }
