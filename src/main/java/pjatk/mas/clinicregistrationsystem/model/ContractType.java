@@ -11,9 +11,14 @@ public abstract class ContractType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    ContractType() {}
+    protected ContractType() {}
 
     public abstract float calculateVacationEntitlement();
+
+    @Transient
+    public float getVacationEntitlement() {
+        return calculateVacationEntitlement();
+    }
 
     public Long getId() { return id; }
 }
