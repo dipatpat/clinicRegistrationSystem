@@ -32,10 +32,19 @@ public class PatientService {
         return patientRepository.findByPesel(pesel);
     }
 
+    public Patient findById(Long id) {
+        return patientRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Patient not found: " + id));
+    }
+
     public List<Appointment> getAppointments(String pesel) {
         Patient patient = patientRepository.findByPesel(pesel)
                 .orElseThrow(() -> new IllegalArgumentException("Patient not found: " + pesel));
         return new ArrayList<>(patient.getAppointments());
+    }
+
+    public List<Appointment> getAppointmentsById(Long id) {
+        return new ArrayList<>(findById(id).getAppointments());
     }
 
     @Transactional
