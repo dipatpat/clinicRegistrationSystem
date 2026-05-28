@@ -36,6 +36,7 @@
                 <th>Room</th>
                 <th>Duration</th>
                 <th>Status</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -49,9 +50,13 @@
                           th:classappend="'badge-' + ${apt.status.name().toLowerCase()}"
                           th:text="${apt.status}"></span>
                 </td>
+                <td>
+                    <a th:href="@{/patients/{id}/appointments(id=${apt.patient.id})}"
+                       class="btn btn-sm btn-secondary">Patient's appointments →</a>
+                </td>
             </tr>
             <tr th:if="${#lists.isEmpty(appointments)}">
-                <td colspan="5" class="empty-row">No appointments found for this doctor.</td>
+                <td colspan="6" class="empty-row">No appointments found for this doctor.</td>
             </tr>
             </tbody>
         </table>
