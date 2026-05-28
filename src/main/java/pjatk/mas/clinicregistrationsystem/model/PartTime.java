@@ -4,7 +4,6 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.Transient;
 import pjatk.mas.clinicregistrationsystem.model.enums.Shift;
 
 @Entity
@@ -26,18 +25,13 @@ public class PartTime extends ContractType {
         this.hoursInContract = hoursInContract;
     }
 
-    public static PartTime create(Shift shift, int hoursInContract) {
+    static PartTime create(Shift shift, int hoursInContract) {
         return new PartTime(shift, hoursInContract);
     }
 
     @Override
     public float calculateVacationEntitlement() {
         return ((float) hoursInContract / FullTime.HOURS_IN_CONTRACT) * Employee.VACATION_DAYS_BASE;
-    }
-
-    @Transient
-    public float getVacationEntitlement() {
-        return calculateVacationEntitlement();
     }
 
     public Shift getShift() { return shift; }
