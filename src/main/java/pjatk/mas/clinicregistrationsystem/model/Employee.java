@@ -47,7 +47,8 @@ public abstract class Employee extends Person {
     protected Employee(String firstName, String lastName, LocalDate dateOfBirth,
                        Address address, String phoneNumber, String emailAddress,
                        String jobTitle, float hourlyRate, String bankAccount,
-                       String login, String password, String documentId) {
+                       String login, String password, String documentId,
+                       ContractType contractType) {
         super(firstName, lastName, dateOfBirth, address, phoneNumber, emailAddress);
         if (jobTitle == null || jobTitle.isBlank()) throw new IllegalArgumentException("Job title cannot be blank");
         if (hourlyRate <= 0) throw new IllegalArgumentException("Hourly rate must be positive");
@@ -55,12 +56,14 @@ public abstract class Employee extends Person {
         if (login == null || login.isBlank()) throw new IllegalArgumentException("Login cannot be blank");
         if (password == null || password.isBlank()) throw new IllegalArgumentException("Password cannot be blank");
         if (documentId == null || documentId.isBlank()) throw new IllegalArgumentException("Document ID cannot be blank");
+        if (contractType == null) throw new IllegalArgumentException("Contract type cannot be null");
         this.jobTitle = jobTitle;
         this.hourlyRate = hourlyRate;
         this.bankAccount = bankAccount;
         this.login = login;
         this.password = password;
         this.documentId = documentId;
+        this.contractType = contractType;
     }
 
     @Transient
@@ -71,11 +74,6 @@ public abstract class Employee extends Person {
 
     public float calculateSalary(WorkRecord workRecord) {
         return workRecord.getHoursWorked() * hourlyRate;
-    }
-
-    public void assignContract(ContractType contractType) {
-        if (contractType == null) throw new IllegalArgumentException("Contract type cannot be null");
-        this.contractType = contractType;
     }
 
     public WorkRecord addWorkRecord(int month, int year, float hoursWorked) {
