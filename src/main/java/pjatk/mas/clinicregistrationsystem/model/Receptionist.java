@@ -2,6 +2,7 @@ package pjatk.mas.clinicregistrationsystem.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import pjatk.mas.clinicregistrationsystem.model.enums.DocumentType;
 import pjatk.mas.clinicregistrationsystem.model.enums.Shift;
 
 import java.time.LocalDate;
@@ -27,10 +28,10 @@ public class Receptionist extends Employee {
                         Address address, String phoneNumber, String emailAddress,
                         String jobTitle, float hourlyRate, String bankAccount,
                         String login, String password, String documentNumber,
-                        ContractType contractType,
+                        DocumentType documentType, ContractType contractType,
                         List<String> languagesSpoken) {
         super(firstName, lastName, dateOfBirth, address, phoneNumber, emailAddress,
-                jobTitle, hourlyRate, bankAccount, login, password, documentNumber, contractType);
+                jobTitle, hourlyRate, bankAccount, login, password, documentNumber, documentType, contractType);
         if (languagesSpoken == null || languagesSpoken.isEmpty())
             throw new IllegalArgumentException("Receptionist must speak at least one language");
         this.languagesSpoken = new ArrayList<>(languagesSpoken);
@@ -40,22 +41,24 @@ public class Receptionist extends Employee {
                                                   Address address, String phoneNumber, String emailAddress,
                                                   String jobTitle, float hourlyRate, String bankAccount,
                                                   String login, String password, String documentNumber,
+                                                  DocumentType documentType,
                                                   List<String> languagesSpoken,
                                                   float overtimeRate) {
         return new Receptionist(firstName, lastName, dateOfBirth, address, phoneNumber, emailAddress,
                 jobTitle, hourlyRate, bankAccount, login, password, documentNumber,
-                FullTime.create(overtimeRate), languagesSpoken);
+                documentType, FullTime.create(overtimeRate), languagesSpoken);
     }
 
     public static Receptionist createWithPartTime(String firstName, String lastName, LocalDate dateOfBirth,
                                                   Address address, String phoneNumber, String emailAddress,
                                                   String jobTitle, float hourlyRate, String bankAccount,
                                                   String login, String password, String documentNumber,
+                                                  DocumentType documentType,
                                                   List<String> languagesSpoken,
                                                   Shift shift, int hoursInContract) {
         return new Receptionist(firstName, lastName, dateOfBirth, address, phoneNumber, emailAddress,
                 jobTitle, hourlyRate, bankAccount, login, password, documentNumber,
-                PartTime.create(shift, hoursInContract), languagesSpoken);
+                documentType, PartTime.create(shift, hoursInContract), languagesSpoken);
     }
 
     public static List<String> getSpokenLanguages(List<Receptionist> receptionists) {

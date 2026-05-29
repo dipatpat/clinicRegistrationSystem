@@ -43,6 +43,7 @@ public class DataSeeder {
                     warsawCenter, "+48 600 100 100", "anna.kowalska@clinic.pl",
                     "Clinic Manager", 120f, "PL10 1090 0043 0000 0710 8100 0001",
                     "anna", encodedPassword, "DOC123456",
+                    DocumentType.NATIONAL_ID,
                     SeniorityLevel.SENIOR, 1.5f);
             manager.addWorkRecord(5, 2026, 160f);
             employeeRepository.save(manager);
@@ -53,6 +54,7 @@ public class DataSeeder {
                     warsawMokotow, "+48 600 200 200", "katarzyna.zielinska@clinic.pl",
                     "Receptionist", 45f, "PL10 1090 0043 0000 0710 8100 0002",
                     "katarzyna", encodedPassword, "DOC234567",
+                    DocumentType.NATIONAL_ID,
                     List.of("Polish", "English"),
                     Shift.MORNING, 30);
             receptionist.addWorkRecord(5, 2026, 120f);
@@ -69,6 +71,7 @@ public class DataSeeder {
                     warsawCenter, "+48 600 300 100", "jan.nowak@clinic.pl",
                     "Cardiologist", 100f, "PL10 1090 0043 0000 0710 8100 0003",
                     "jan", encodedPassword, "LIC100001",
+                    DocumentType.NATIONAL_ID,
                     "Cardiology", "PWZ/100001", 1.5f);
             drNowak.addSchedule(scheduleFrom, scheduleTo, dayStart, dayEnd);
             drNowak.addWorkRecord(5, 2026, 160f);
@@ -79,6 +82,7 @@ public class DataSeeder {
                     krakow, "+48 600 300 200", "maria.wisniewska@clinic.pl",
                     "GP", 80f, "PL10 1090 0043 0000 0710 8100 0004",
                     "maria", encodedPassword, "LIC100002",
+                    DocumentType.PASSPORT,
                     "General Practice", "PWZ/100002", Shift.MORNING, 20);
             drWisniewska.addSchedule(scheduleFrom, scheduleTo, LocalTime.of(8, 0), LocalTime.of(12, 0));
             drWisniewska.addWorkRecord(5, 2026, 80f);
@@ -89,6 +93,7 @@ public class DataSeeder {
                     gdansk, "+48 600 300 300", "ewa.kowalczyk@clinic.pl",
                     "Gynaecologist", 95f, "PL10 1090 0043 0000 0710 8100 0005",
                     "ewa", encodedPassword, "LIC100003",
+                    DocumentType.NATIONAL_ID,
                     "Gynaecology", "PWZ/100003", 1.5f);
             drKowalczyk.addSchedule(scheduleFrom, scheduleTo, dayStart, dayEnd);
             drKowalczyk.addWorkRecord(5, 2026, 160f);
@@ -99,6 +104,7 @@ public class DataSeeder {
                     warsawMokotow, "+48 600 300 400", "joanna.dabrowska@clinic.pl",
                     "Gynaecologist", 95f, "PL10 1090 0043 0000 0710 8100 0006",
                     "joanna", encodedPassword, "LIC100004",
+                    DocumentType.NATIONAL_ID,
                     "Gynaecology", "PWZ/100004", 1.5f);
             drDabrowska.addSchedule(scheduleFrom, scheduleTo, dayStart, dayEnd);
             drDabrowska.addWorkRecord(5, 2026, 160f);
@@ -109,6 +115,7 @@ public class DataSeeder {
                     poznan, "+48 600 300 500", "tomasz.wojcik@clinic.pl",
                     "Dermatologist", 90f, "PL10 1090 0043 0000 0710 8100 0007",
                     "tomasz", encodedPassword, "LIC100005",
+                    DocumentType.PASSPORT,
                     "Dermatology", "PWZ/100005", 1.5f);
             drWojcik.addSchedule(scheduleFrom, scheduleTo, dayStart, dayEnd);
             drWojcik.addWorkRecord(5, 2026, 160f);
@@ -119,6 +126,7 @@ public class DataSeeder {
                     lodz, "+48 600 300 600", "agnieszka.lewandowska@clinic.pl",
                     "Dermatologist", 90f, "PL10 1090 0043 0000 0710 8100 0008",
                     "agnieszka.l", encodedPassword, "LIC100006",
+                    DocumentType.NATIONAL_ID,
                     "Dermatology", "PWZ/100006", Shift.AFTERNOON, 30);
             drLewandowska.addSchedule(scheduleFrom, scheduleTo, LocalTime.of(12, 0), LocalTime.of(18, 0));
             drLewandowska.addWorkRecord(5, 2026, 120f);
@@ -190,12 +198,12 @@ public class DataSeeder {
 
             // --- Future appointments ---
             Appointment apt1 = new Appointment(piotr, drNowak,
-                    LocalDateTime.of(2026, 5, 29, 10, 0), "Room 101", 30f);
+                    LocalDateTime.of(2026, 6, 29, 10, 0), "Room 101", 30f);
             apt1.confirm();
             appointmentRepository.save(apt1);
 
             Appointment apt2 = new Appointment(agnieszka, drWojcik,
-                    LocalDateTime.of(2026, 5, 29, 14, 0), "Room 204", 30f);
+                    LocalDateTime.of(2026, 6, 29, 14, 0), "Room 204", 30f);
             appointmentRepository.save(apt2);
 
             Appointment apt3 = new Appointment(piotr, drLewandowska,

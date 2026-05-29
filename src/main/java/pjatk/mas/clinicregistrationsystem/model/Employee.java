@@ -1,6 +1,7 @@
 package pjatk.mas.clinicregistrationsystem.model;
 
 import jakarta.persistence.*;
+import pjatk.mas.clinicregistrationsystem.model.enums.DocumentType;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -34,6 +35,10 @@ public abstract class Employee extends Person {
     @Column(nullable = false, unique = true)
     private String documentNumber;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private DocumentType documentType;
+
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "contract_type_id", nullable = false)
     private ContractType contractType;
@@ -48,7 +53,7 @@ public abstract class Employee extends Person {
                        Address address, String phoneNumber, String emailAddress,
                        String jobTitle, float hourlyRate, String bankAccount,
                        String login, String password, String documentNumber,
-                       ContractType contractType) {
+                       DocumentType documentType, ContractType contractType) {
         super(firstName, lastName, dateOfBirth, address, phoneNumber, emailAddress);
         if (jobTitle == null || jobTitle.isBlank()) throw new IllegalArgumentException("Job title cannot be blank");
         if (hourlyRate <= 0) throw new IllegalArgumentException("Hourly rate must be positive");
@@ -56,6 +61,7 @@ public abstract class Employee extends Person {
         if (login == null || login.isBlank()) throw new IllegalArgumentException("Login cannot be blank");
         if (password == null || password.isBlank()) throw new IllegalArgumentException("Password cannot be blank");
         if (documentNumber == null || documentNumber.isBlank()) throw new IllegalArgumentException("Document number cannot be blank");
+        if (documentType == null) throw new IllegalArgumentException("Document type cannot be null");
         if (contractType == null) throw new IllegalArgumentException("Contract type cannot be null");
         this.jobTitle = jobTitle;
         this.hourlyRate = hourlyRate;
@@ -63,6 +69,7 @@ public abstract class Employee extends Person {
         this.login = login;
         this.password = password;
         this.documentNumber = documentNumber;
+        this.documentType = documentType;
         this.contractType = contractType;
     }
 
@@ -96,6 +103,7 @@ public abstract class Employee extends Person {
     public String getLogin() { return login; }
     public String getPassword() { return password; }
     public String getDocumentNumber() { return documentNumber; }
+    public DocumentType getDocumentType() { return documentType; }
     public ContractType getContractType() { return contractType; }
 
     public void setJobTitle(String jobTitle) {

@@ -1,6 +1,7 @@
 package pjatk.mas.clinicregistrationsystem.model;
 
 import jakarta.persistence.*;
+import pjatk.mas.clinicregistrationsystem.model.enums.DocumentType;
 import pjatk.mas.clinicregistrationsystem.model.enums.Shift;
 
 import java.time.LocalDate;
@@ -32,10 +33,10 @@ public class Doctor extends Employee {
                   Address address, String phoneNumber, String emailAddress,
                   String jobTitle, float hourlyRate, String bankAccount,
                   String login, String password, String documentNumber,
-                  ContractType contractType,
+                  DocumentType documentType, ContractType contractType,
                   String specialization, String licenseNumber) {
         super(firstName, lastName, dateOfBirth, address, phoneNumber, emailAddress,
-                jobTitle, hourlyRate, bankAccount, login, password, documentNumber, contractType);
+                jobTitle, hourlyRate, bankAccount, login, password, documentNumber, documentType, contractType);
         if (specialization == null || specialization.isBlank()) throw new IllegalArgumentException("Specialization cannot be blank");
         if (licenseNumber == null || licenseNumber.isBlank()) throw new IllegalArgumentException("License number cannot be blank");
         this.specialization = specialization;
@@ -46,22 +47,24 @@ public class Doctor extends Employee {
                                             Address address, String phoneNumber, String emailAddress,
                                             String jobTitle, float hourlyRate, String bankAccount,
                                             String login, String password, String documentNumber,
+                                            DocumentType documentType,
                                             String specialization, String licenseNumber,
                                             float overtimeRate) {
         return new Doctor(firstName, lastName, dateOfBirth, address, phoneNumber, emailAddress,
                 jobTitle, hourlyRate, bankAccount, login, password, documentNumber,
-                FullTime.create(overtimeRate), specialization, licenseNumber);
+                documentType, FullTime.create(overtimeRate), specialization, licenseNumber);
     }
 
     public static Doctor createWithPartTime(String firstName, String lastName, LocalDate dateOfBirth,
                                             Address address, String phoneNumber, String emailAddress,
                                             String jobTitle, float hourlyRate, String bankAccount,
                                             String login, String password, String documentNumber,
+                                            DocumentType documentType,
                                             String specialization, String licenseNumber,
                                             Shift shift, int hoursInContract) {
         return new Doctor(firstName, lastName, dateOfBirth, address, phoneNumber, emailAddress,
                 jobTitle, hourlyRate, bankAccount, login, password, documentNumber,
-                PartTime.create(shift, hoursInContract), specialization, licenseNumber);
+                documentType, PartTime.create(shift, hoursInContract), specialization, licenseNumber);
     }
 
     public Schedule addSchedule(LocalDate validFrom, LocalDate validTo,

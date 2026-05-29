@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import pjatk.mas.clinicregistrationsystem.model.*;
+import pjatk.mas.clinicregistrationsystem.model.enums.DocumentType;
 import pjatk.mas.clinicregistrationsystem.model.enums.MedicalEntryType;
 import pjatk.mas.clinicregistrationsystem.model.enums.SeniorityLevel;
 import pjatk.mas.clinicregistrationsystem.model.enums.Shift;
@@ -46,6 +47,7 @@ public class ClinicRegistrationSystemApplication {
                 address, "+48 600 100 100", "anna@clinic.pl",
                 "Clinic Manager", 120f, "PL00000000000000000000000001",
                 "anna", "secret", "DEMO000001",
+                DocumentType.NATIONAL_ID,
                 SeniorityLevel.SENIOR, 1.5f);
         FullTime managerContract = (FullTime) manager.getContractType();
         WorkRecord managerWorkRecord = manager.addWorkRecord(5, 2026, 160f);
@@ -76,6 +78,7 @@ public class ClinicRegistrationSystemApplication {
                 address, "+48 600 200 200", "luiza@clinic.pl",
                 "Receptionist", 45f, "PL00000000000000000000000002",
                 "luiza", "secret", "DEMO000002",
+                DocumentType.NATIONAL_ID,
                 List.of("Polish", "English", "German"),
                 Shift.MORNING, 30);
         PartTime receptionistContract = (PartTime) receptionist.getContractType();
@@ -106,6 +109,7 @@ public class ClinicRegistrationSystemApplication {
                 address, "+48 600 300 100", "jan@clinic.pl",
                 "Cardiologist", 100f, "PL00000000000000000000000003",
                 "jan", "secret", "DEMO-D001",
+                DocumentType.PASSPORT,
                 "Cardiology", "DEMO/LIC001", 1.5f);
         FullTime doctorContract = (FullTime) doctor.getContractType();
         Schedule schedule = doctor.addSchedule(
