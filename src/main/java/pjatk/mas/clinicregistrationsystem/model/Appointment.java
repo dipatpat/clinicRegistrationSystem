@@ -33,9 +33,6 @@ public class Appointment {
     private LocalDateTime confirmedAt;
     private LocalDateTime completedAt;
 
-    @Column(nullable = false)
-    private boolean noShow = false;
-
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
@@ -97,7 +94,6 @@ public class Appointment {
         if (date.isAfter(LocalDateTime.now()))
             throw new IllegalStateException("Cannot mark a future appointment as no-show");
         this.status = Status.NOSHOW;
-        this.noShow = true;
     }
 
     public void markAsCompleted() {
@@ -120,7 +116,7 @@ public class Appointment {
     public LocalDateTime getCancelledAt() { return cancelledAt; }
     public LocalDateTime getConfirmedAt() { return confirmedAt; }
     public LocalDateTime getCompletedAt() { return completedAt; }
-    public boolean isNoShow() { return noShow; }
+    public boolean isNoShow() { return status == Status.NOSHOW; }
     public Patient getPatient() { return patient; }
     public Doctor getDoctor() { return doctor; }
 
