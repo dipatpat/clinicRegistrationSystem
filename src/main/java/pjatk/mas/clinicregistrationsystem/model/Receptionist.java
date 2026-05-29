@@ -26,11 +26,11 @@ public class Receptionist extends Employee {
     private Receptionist(String firstName, String lastName, LocalDate dateOfBirth,
                         Address address, String phoneNumber, String emailAddress,
                         String jobTitle, float hourlyRate, String bankAccount,
-                        String login, String password, String documentId,
+                        String login, String password, String documentNumber,
                         ContractType contractType,
                         List<String> languagesSpoken) {
         super(firstName, lastName, dateOfBirth, address, phoneNumber, emailAddress,
-                jobTitle, hourlyRate, bankAccount, login, password, documentId, contractType);
+                jobTitle, hourlyRate, bankAccount, login, password, documentNumber, contractType);
         if (languagesSpoken == null || languagesSpoken.isEmpty())
             throw new IllegalArgumentException("Receptionist must speak at least one language");
         this.languagesSpoken = new ArrayList<>(languagesSpoken);
@@ -39,22 +39,22 @@ public class Receptionist extends Employee {
     public static Receptionist createWithFullTime(String firstName, String lastName, LocalDate dateOfBirth,
                                                   Address address, String phoneNumber, String emailAddress,
                                                   String jobTitle, float hourlyRate, String bankAccount,
-                                                  String login, String password, String documentId,
+                                                  String login, String password, String documentNumber,
                                                   List<String> languagesSpoken,
                                                   float overtimeRate) {
         return new Receptionist(firstName, lastName, dateOfBirth, address, phoneNumber, emailAddress,
-                jobTitle, hourlyRate, bankAccount, login, password, documentId,
+                jobTitle, hourlyRate, bankAccount, login, password, documentNumber,
                 FullTime.create(overtimeRate), languagesSpoken);
     }
 
     public static Receptionist createWithPartTime(String firstName, String lastName, LocalDate dateOfBirth,
                                                   Address address, String phoneNumber, String emailAddress,
                                                   String jobTitle, float hourlyRate, String bankAccount,
-                                                  String login, String password, String documentId,
+                                                  String login, String password, String documentNumber,
                                                   List<String> languagesSpoken,
                                                   Shift shift, int hoursInContract) {
         return new Receptionist(firstName, lastName, dateOfBirth, address, phoneNumber, emailAddress,
-                jobTitle, hourlyRate, bankAccount, login, password, documentId,
+                jobTitle, hourlyRate, bankAccount, login, password, documentNumber,
                 PartTime.create(shift, hoursInContract), languagesSpoken);
     }
 

@@ -32,7 +32,7 @@ public abstract class Employee extends Person {
     private String password;
 
     @Column(nullable = false, unique = true)
-    private String documentId;
+    private String documentNumber;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "contract_type_id", nullable = false)
@@ -47,7 +47,7 @@ public abstract class Employee extends Person {
     protected Employee(String firstName, String lastName, LocalDate dateOfBirth,
                        Address address, String phoneNumber, String emailAddress,
                        String jobTitle, float hourlyRate, String bankAccount,
-                       String login, String password, String documentId,
+                       String login, String password, String documentNumber,
                        ContractType contractType) {
         super(firstName, lastName, dateOfBirth, address, phoneNumber, emailAddress);
         if (jobTitle == null || jobTitle.isBlank()) throw new IllegalArgumentException("Job title cannot be blank");
@@ -55,14 +55,14 @@ public abstract class Employee extends Person {
         if (bankAccount == null || bankAccount.isBlank()) throw new IllegalArgumentException("Bank account cannot be blank");
         if (login == null || login.isBlank()) throw new IllegalArgumentException("Login cannot be blank");
         if (password == null || password.isBlank()) throw new IllegalArgumentException("Password cannot be blank");
-        if (documentId == null || documentId.isBlank()) throw new IllegalArgumentException("Document ID cannot be blank");
+        if (documentNumber == null || documentNumber.isBlank()) throw new IllegalArgumentException("Document number cannot be blank");
         if (contractType == null) throw new IllegalArgumentException("Contract type cannot be null");
         this.jobTitle = jobTitle;
         this.hourlyRate = hourlyRate;
         this.bankAccount = bankAccount;
         this.login = login;
         this.password = password;
-        this.documentId = documentId;
+        this.documentNumber = documentNumber;
         this.contractType = contractType;
     }
 
@@ -95,7 +95,7 @@ public abstract class Employee extends Person {
     public int getVacationDaysTaken() { return vacationDaysTaken; }
     public String getLogin() { return login; }
     public String getPassword() { return password; }
-    public String getDocumentId() { return documentId; }
+    public String getDocumentNumber() { return documentNumber; }
     public ContractType getContractType() { return contractType; }
 
     public void setJobTitle(String jobTitle) {

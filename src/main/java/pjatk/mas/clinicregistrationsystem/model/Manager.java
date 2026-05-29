@@ -20,11 +20,11 @@ public class Manager extends Employee {
     private Manager(String firstName, String lastName, LocalDate dateOfBirth,
                    Address address, String phoneNumber, String emailAddress,
                    String jobTitle, float hourlyRate, String bankAccount,
-                   String login, String password, String documentId,
+                   String login, String password, String documentNumber,
                    ContractType contractType,
                    SeniorityLevel seniorityLevel) {
         super(firstName, lastName, dateOfBirth, address, phoneNumber, emailAddress,
-                jobTitle, hourlyRate, bankAccount, login, password, documentId, contractType);
+                jobTitle, hourlyRate, bankAccount, login, password, documentNumber, contractType);
         if (seniorityLevel == null) throw new IllegalArgumentException("Seniority level cannot be null");
         this.seniorityLevel = seniorityLevel;
     }
@@ -32,22 +32,22 @@ public class Manager extends Employee {
     public static Manager createWithFullTime(String firstName, String lastName, LocalDate dateOfBirth,
                                              Address address, String phoneNumber, String emailAddress,
                                              String jobTitle, float hourlyRate, String bankAccount,
-                                             String login, String password, String documentId,
+                                             String login, String password, String documentNumber,
                                              SeniorityLevel seniorityLevel,
                                              float overtimeRate) {
         return new Manager(firstName, lastName, dateOfBirth, address, phoneNumber, emailAddress,
-                jobTitle, hourlyRate, bankAccount, login, password, documentId,
+                jobTitle, hourlyRate, bankAccount, login, password, documentNumber,
                 FullTime.create(overtimeRate), seniorityLevel);
     }
 
     public static Manager createWithPartTime(String firstName, String lastName, LocalDate dateOfBirth,
                                              Address address, String phoneNumber, String emailAddress,
                                              String jobTitle, float hourlyRate, String bankAccount,
-                                             String login, String password, String documentId,
+                                             String login, String password, String documentNumber,
                                              SeniorityLevel seniorityLevel,
                                              Shift shift, int hoursInContract) {
         return new Manager(firstName, lastName, dateOfBirth, address, phoneNumber, emailAddress,
-                jobTitle, hourlyRate, bankAccount, login, password, documentId,
+                jobTitle, hourlyRate, bankAccount, login, password, documentNumber,
                 PartTime.create(shift, hoursInContract), seniorityLevel);
     }
 

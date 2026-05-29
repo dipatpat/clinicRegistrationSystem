@@ -57,7 +57,7 @@ public class ClinicRegistrationSystemApplication {
         System.out.println("  job title:          " + manager.getJobTitle());
         System.out.println("  hourly rate:        " + manager.getHourlyRate());
         System.out.println("  bank account:       " + manager.getBankAccount());
-        System.out.println("  document id:        " + manager.getDocumentId());
+        System.out.println("  document number:" + manager.getDocumentNumber());
         System.out.println("  seniority:          " + manager.getSeniorityLevel());
         System.out.println("  contract type:      " + managerContract.getClass().getSimpleName()
                 + " | overtime rate: " + managerContract.getOvertimeRate()
@@ -87,7 +87,7 @@ public class ClinicRegistrationSystemApplication {
         System.out.println("  job title:          " + receptionist.getJobTitle());
         System.out.println("  hourly rate:        " + receptionist.getHourlyRate());
         System.out.println("  bank account:       " + receptionist.getBankAccount());
-        System.out.println("  document id:        " + receptionist.getDocumentId());
+        System.out.println("  document number:" + receptionist.getDocumentNumber());
         System.out.println("  languages spoken:   " + receptionist.getLanguagesSpoken());
         System.out.println("  contract type:      " + receptionistContract.getClass().getSimpleName()
                 + " | shift: " + receptionistContract.getShift()
@@ -119,7 +119,7 @@ public class ClinicRegistrationSystemApplication {
         System.out.println("  job title:          " + doctor.getJobTitle());
         System.out.println("  hourly rate:        " + doctor.getHourlyRate());
         System.out.println("  bank account:       " + doctor.getBankAccount());
-        System.out.println("  document id:        " + doctor.getDocumentId());
+        System.out.println("  document number:" + doctor.getDocumentNumber());
         System.out.println("  specialization:     " + doctor.getSpecialization());
         System.out.println("  license number:     " + doctor.getLicenseNumber());
         System.out.println("  contract type:      " + doctorContract.getClass().getSimpleName()
